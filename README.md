@@ -1,6 +1,6 @@
 # forticare-api
 
-Proof of concept python3 scripts to register Fortinet registration code to retrieve license files using the FortiCare API.
+Proof of concept python3 scripts using the FortiCare API to register Fortinet registration codes and to retrieve license files.
 
 
 
