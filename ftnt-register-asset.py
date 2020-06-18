@@ -4,12 +4,42 @@ import json
 import logging
 import os
 import sys
+import configparser
 from optparse import OptionParser
 
 import requests
 
-api_url = 'https://Support.Fortinet.COM/ES/FCWS_RegistrationService.svc/REST'
-api_token = '153C-9GBH-I4AV-O5Q2-Y0BX-H1TB-OA32-GKW6'
+def init_forticare(file='.forticare'):
+
+    """
+    Initialize code with both the forticare url and token retrieved from a
+    config file.
+
+    Arguments:
+    file -- the config file in INI format (default to .forticare)
+
+    Returned values:
+    forticare_url   -- the FortiCare url
+    forticare_token -- the FortiCare token
+    """
+
+    config = configparser.ConfigParser()
+    config.read(file)
+    section = 'forticare'
+
+    #forticare_url = 'https://Support.Fortinet.COM/ES/FCWS_RegistrationService.svc/REST'
+    #forticare_token = '153C-9GBH-I4AV-O5Q2-Y0BX-H1TB-OA32-GKW6'
+
+    try:
+        forticare_url = config[section]['url']
+        forticare_token = config[section]['token']    
+    except KeyError as k:
+        logger.error('Missing key {} in configuration file "{}"'.format(k, file))
+        quit()
+
+    logger.debug(f'FortiCare URL: {forticare_url}, FortiCare Token: {forticare_token}')
+    
+    return forticare_url, forticare_token
 
 def init_logging():
 
@@ -47,7 +77,7 @@ def build_payload(options):
         logger.debug('No Serial number specified, set payload with an empty string.')
 
     json_payload = {
-        "Token": api_token,
+        "Token": forticare_token,
         "Version": "1.0",
         "Serial_Number": options.sn,
         "License_Registration_Code": options.code,
@@ -61,7 +91,7 @@ def build_payload(options):
 
 def register(payload):
     api_function = 'REST_RegisterLicense'
-    url = api_url + '/' + api_function
+    url = forticare_url + '/' + api_function
     r = requests.post(url=url, json=payload)
     logger.debug('Registration operation terminated with "%s"' % r.json()['Message'])
     logger.debug('JSON output is:\n%s' % r.json())
@@ -119,8 +149,11 @@ def write_license_file(lic, file):
     f.close()
     
 def main():
+    global forticare_url, forticare_token
+
     init_logging()
     init_option_parser()
+    forticare_url, forticare_token = init_forticare()
 
     if options.verbose is False:
         logger.setLevel(logging.INFO)
