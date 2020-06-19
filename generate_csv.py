@@ -43,7 +43,7 @@ def parse_command_line_arguments():
                         nargs=1,
                         required=True,                        
                         help='Indicate the license IP address')
-                        
+
     args = parser.parse_args()
 
     return (args.zip_file[0],
