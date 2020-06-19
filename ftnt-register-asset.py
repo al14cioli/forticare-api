@@ -27,9 +27,6 @@ def init_forticare(file='.forticare'):
     config.read(file)
     section = 'forticare'
 
-    #forticare_url = 'https://Support.Fortinet.COM/ES/FCWS_RegistrationService.svc/REST'
-    #forticare_token = '153C-9GBH-I4AV-O5Q2-Y0BX-H1TB-OA32-GKW6'
-
     try:
         forticare_url = config[section]['url']
         forticare_token = config[section]['token']    
