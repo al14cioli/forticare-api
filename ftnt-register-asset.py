@@ -77,10 +77,14 @@ def build_payload_product(options):
     json_payload = {
         "Token": forticare_token,
         "Version": "1.0",
-        "Serial_Number": options.sn,
-        "Contract_Number": options.code,
-        "Additional_Info": options.ip,
-        "Is_Government": False,
+        "RegistrationUnits": [
+            {
+                "Serial_Number": options.sn,
+                "Contract_Number": options.code,
+                "Additional_Info": options.ip,
+                "Is_Government": False,
+            }
+        ]
     }
 
     logger.debug('Payload to post is:')
