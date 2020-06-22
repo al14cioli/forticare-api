@@ -61,3 +61,52 @@ $ ./register.sh -f fmg.csv
 
 The script shell is taking care of saving the license file (when FortiCare
 returns one) in a file named `<sn>.lic`.
+
+# How to add Service Entitlement on registered products?
+
+## Generate the CSV file for the FortiGate VM licenses
+
+```
+$ ./generate_csv.py -f FG-VMUL_27228668.zip -i '' -d 'FG-VMUL: SD-WAN Orchestrator demo" > fgt.csv
+```
+
+## Generate the FortiGate VM licenses
+
+```
+$ ./register.sh -f fgt.csv
+```
+
+## Create a folder for all generated FortiGate VM licenses
+
+```
+$ mkdir fgt_licenses
+```
+
+## Move generated FortiGate VM licenses in this folder
+
+```
+$ mv FG*.lic fgt_licenses
+```
+
+## Generate the CSV file for the Service Entitlements
+
+```
+$ ./generate_csv.py -f FC-10-FVMUL-819-02-12_27237843.zip -i '' -d '365 Bundle: SD-WAN Orchestrator demo' -l fgt_licenses > fc.csv
+```
+
+Double check that all lines of this CSV is having a code (first field) and a
+corresponding serial number (last field).
+
+For instance:
+
+```
+[...]
+0022TV383064,,365 Bundle: SD-WAN Orchestrator demo,FGVMULTM21223222
+[...]
+```
+
+## Generate the Service Entitlemnets
+
+```
+$ ./register.sh -f fc.csv
+```
