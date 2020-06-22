@@ -92,7 +92,8 @@ def register(payload):
     url = forticare_url + '/' + api_function
     r = requests.post(url=url, json=payload)
     logger.debug('Registration operation terminated with "%s"' % r.json()['Message'])
-    logger.debug('JSON output is:\n%s' % r.json())
+    logger.debug('JSON output is:')
+    logger.debug(json.dumps(r.json(), indent=4))
 
     return r.json()
 
