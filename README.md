@@ -12,7 +12,9 @@ Create in your working directory a `.forticare` in INI format as shown below
 url = https://Support.Fortinet.COM/ES/FCWS_RegistrationService.svc/REST
 token = NZTB-630M-OLYE-PPKG-4WWM-TL2A-WLZ2-0DJU
 ```
-# Create a CSV file
+# To register FGT, FMG or FAZ VM licenses
+
+## Create a CSV file
 
 It should have the following format:
 
@@ -42,7 +44,7 @@ D0UAB-FWEX6-MQ6A5-EVX8H-GHB1W,192.168.244.200,FMG: SD-WAN orchestrator demo
 Notes:
 
   [1] For the moment, the CSV generator has been tested against ZIP files for
-      FGT-VM, FMG-VM and FAZ-VM products.
+      FGT-VM, FMG-VM, FAZ-VM and 365 bundle entitlement products.
   [2] Ignore the *PdfReadWarning* error.
 
 So to generate a CSV file just redirect the output to a file:
@@ -51,7 +53,7 @@ So to generate a CSV file just redirect the output to a file:
 $ ./generate_csv.py -f FMG-VM-BASE_27228669.zip -d "FMG: SD-WAN orchestrator demo" --ip '192.168.244.200' > fmg.csv
 ````
 
-# Register your liceses
+# Register your licenses
 
 We can just use the shell script `register.sh`:
 
@@ -62,7 +64,7 @@ $ ./register.sh -f fmg.csv
 The script shell is taking care of saving the license file (when FortiCare
 returns one) in a file named `<sn>.lic`.
 
-# How to add Service Entitlement on registered products?
+# To add Service Entitlement on registered products?
 
 ## Generate the CSV file for the FortiGate VM licenses
 
@@ -105,7 +107,7 @@ For instance:
 [...]
 ```
 
-## Generate the Service Entitlemnets
+## Generate the Service Entitlements
 
 ```
 $ ./register.sh -f fc.csv
