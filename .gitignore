@@ -1,6 +1,9 @@
 # FortiCare configuration file
 .forticare
 
+# CSV file
+*.csv
+
 # Registration Code files + license files
 *.zip
 *.pdf
