@@ -84,7 +84,7 @@ def build_payload(options):
     }
 
     logger.debug('Payload to post is:')
-    logger.debug(json.dump(json_payload, align=4))
+    logger.debug(json.dumps(json_payload, align=4))
     return json_payload
 
 def register(payload):
