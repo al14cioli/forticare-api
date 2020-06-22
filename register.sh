@@ -26,7 +26,8 @@ do
     regcode=`echo ${line} | cut -d ',' -f1`
     ipaddr=`echo ${line} | cut -d ',' -f2`
     desc=`echo ${line} | cut -d ',' -f3`
+    sn=`echo ${line} | cut -d ',' -f4`
     
-    echo "*** Registration code [${regcode}], IP address [${ipaddr}], description=[${desc}]"
-    ./ftnt-register-asset.py --code "${regcode}" --description "${desc}" --address "${ipaddr}" --lic --verbose
+    echo "*** Registration code [${regcode}], IP address [${ipaddr}], description=[${desc}], SN [${sn}]"
+    ./ftnt-register-asset.py --code "${regcode}" --description "${desc}" --address "${ipaddr}" --serial "${sn}" --lic --verbose
 done

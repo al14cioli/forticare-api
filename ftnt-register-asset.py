@@ -5,6 +5,7 @@ import logging
 import os
 import sys
 import configparser
+import re
 from optparse import OptionParser
 
 import requests
@@ -26,9 +27,6 @@ def init_forticare(file='.forticare'):
     config = configparser.ConfigParser()
     config.read(file)
     section = 'forticare'
-
-    #forticare_url = 'https://Support.Fortinet.COM/ES/FCWS_RegistrationService.svc/REST'
-    #forticare_token = '153C-9GBH-I4AV-O5Q2-Y0BX-H1TB-OA32-GKW6'
 
     try:
         forticare_url = config[section]['url']
@@ -66,7 +64,34 @@ def init_logging():
     
     return logger
 
-def build_payload(options):
+def build_payload_product(options):
+
+    if options.ip is None:
+        options.ip = ''
+        logger.debug('No IP address specified, set payload it with an empty string.')
+
+    if options.sn is None:
+        options.sn = ''
+        logger.debug('No Serial number specified, set payload with an empty string.')
+
+    json_payload = {
+        "Token": forticare_token,
+        "Version": "1.0",
+        "RegistrationUnits": [
+            {
+                "Serial_Number": options.sn,
+                "Contract_Number": options.code,
+                "Additional_Info": options.ip,
+                "Is_Government": False,
+            }
+        ]
+    }
+
+    logger.debug('Payload to post is:')
+    logger.debug(json.dumps(json_payload, indent=4))
+    return json_payload
+
+def build_payload_license(options):
 
     if options.ip is None:
         options.ip = ''
@@ -86,15 +111,16 @@ def build_payload(options):
         "Is_Government": False,
     }
 
-    logger.debug('Payload to post is: %s' % json_payload)
+    logger.debug('Payload to post is:')
+    logger.debug(json.dumps(json_payload, indent=4))
     return json_payload
 
-def register(payload):
-    api_function = 'REST_RegisterLicense'
+def do_register(api_function, payload):
     url = forticare_url + '/' + api_function
     r = requests.post(url=url, json=payload)
     logger.debug('Registration operation terminated with "%s"' % r.json()['Message'])
-    logger.debug('JSON output is:\n%s' % r.json())
+    logger.debug('JSON output is:')
+    logger.debug(json.dumps(r.json(), indent=4))
 
     return r.json()
 
@@ -147,8 +173,45 @@ def write_license_file(lic, file):
     f = open(file, 'w')
     f.write(lic)
     f.close()
+
+def register_product(options):
+    my_payload = build_payload_product(options)
+    api_function = 'REST_RegisterUnits'
+    jres = do_register(api_function, my_payload)
+
+def register_license(options):
+    my_payload = build_payload_license(options)
+    api_function = 'REST_RegisterLicense'
+    jres = do_register(api_function, my_payload)
+
+    if options.lic:
+        logger.debug('Option --lic specified so license file will be saved.')
+        file = jres['AssetDetails']['Serial_Number'] + ".lic"
+        lic = jres['AssetDetails']['License']['License_File']
+        write_license_file(lic, file)
+
+def is_product(options):
+    """
+    Return whether the code we're using is for a "product" or a "license".
+    If it's for a "product" then it means we're adding a service entitlement. If
+    it's for a "license" then it means we're registering a new FGT, FMG or FAZ
+    VM.
     
+    Arguments:
+    options:    The global dict initialized with function init_option_parser() 
+
+    Returned values:
+    True:      The code corresponds to a product
+    False:     The code corresponds to a license
+    """
+
+    code = options.code
+    result = re.search('-', code)
+
+    return False if result else True
+
 def main():
+
     global forticare_url, forticare_token
 
     init_logging()
@@ -157,15 +220,13 @@ def main():
 
     if options.verbose is False:
         logger.setLevel(logging.INFO)
-    
-    my_payload = build_payload(options)
-    jres = register(my_payload)
 
-    if options.lic:
-        logger.debug('Option --lic specified so license file will be saved.')
-        file = jres['AssetDetails']['Serial_Number'] + ".lic"
-        lic = jres['AssetDetails']['License']['License_File']
-        write_license_file(lic, file)
+    if is_product(options):
+        # Register Product
+        register_product(options)
+    else:
+        # Register License
+        register_license(options)
 
 if __name__ == '__main__':
-        main()
+    main()

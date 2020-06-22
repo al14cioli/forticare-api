@@ -1,6 +1,17 @@
 # FortiCare configuration file
 .forticare
 
+# CSV file
+*.csv
+
+# Registration Code files + license files
+*.zip
+*.pdf
+*.lic
+
+# Pipenv files
+Pipfile*
+
 # OS generated files
 .DS_Store
 .DS_Store?
