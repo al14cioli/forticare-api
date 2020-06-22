@@ -4,6 +4,7 @@
 # Registration Code files + license files
 *.zip
 *.pdf
+*.lic
 
 # Pipenv files
 Pipfile*
