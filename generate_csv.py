@@ -92,7 +92,7 @@ if __name__ == '__main__':
 
     license_type_string = license_types.get(license_type)
     if license_type_string:
-        print('ZIP file is for [{}] license(s).'.format(license_types[license_type]))
+        print('# ZIP file is for [{}] license(s).'.format(license_types[license_type]))
         if license_type == 'FC':
             write_csv_output_fc(zip_file)
         else:
