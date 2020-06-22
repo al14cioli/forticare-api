@@ -83,7 +83,8 @@ def build_payload(options):
         "Is_Government": False,
     }
 
-    logger.debug('Payload to post is: %s' % json_payload)
+    logger.debug('Payload to post is:')
+    logger.debug(json.dump(json_payload, align=4))
     return json_payload
 
 def register(payload):
