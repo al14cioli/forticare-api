@@ -10,7 +10,7 @@ import argparse
 file = 'FG-VMUL_27228668.zip'
 
 def get_registration_code(string):
-    result = re.search('Registration Code\s+:\s+(.{29})', string)
+    result = re.search('Registration Code\s+:\s+(.{30})', string)
 
     if result:
         return result.group(1) 
