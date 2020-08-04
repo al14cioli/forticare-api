@@ -55,13 +55,11 @@ def parse_command_line_arguments():
                         help="Indicate a folder with FortiGate-VM .lic files")
 
     args = parser.parse_args()
-
-    licenses = args.licenses[0] if args.licenses else None
         
     return (args.zip_file[0],
             args.ip[0],
             args.desc[0],
-            licenses)
+            args.licenses[0])
 
 def get_license_type(zip_file):
     result = re.search('([A-Z]{2,3})-', zip_file)
