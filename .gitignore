@@ -15,3 +15,10 @@ Pipfile*
 # OS generated files
 .DS_Store
 .DS_Store?
+
+# Visual Studio Code files
+.vscode
+
+# Emacs backup or temporary files
+
+\#*\#
