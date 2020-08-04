@@ -68,7 +68,7 @@ def build_payload_product(options):
 
     if options.ip is None:
         options.ip = ''
-        logger.debug('No IP address specified, set payload it with an empty string.')
+        logger.debug('No IP address specified, set payload with an empty string.')
 
     if options.sn is None:
         options.sn = ''
@@ -177,7 +177,7 @@ def write_license_file(lic, file):
 def register_product(options):
     my_payload = build_payload_product(options)
     api_function = 'REST_RegisterUnits'
-    jres = do_register(api_function, my_payload)
+    do_register(api_function, my_payload)
 
 def register_license(options):
     my_payload = build_payload_license(options)
