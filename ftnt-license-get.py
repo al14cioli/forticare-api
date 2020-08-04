@@ -9,7 +9,7 @@ from optparse import OptionParser
 import requests
 
 api_url = 'https://Support.Fortinet.COM/ES/FCWS_RegistrationService.svc/REST'
-api_token = '153C-9GBH-I4AV-O5Q2-Y0BX-H1TB-OA32-GKW6'
+api_token = '<YOUR_FORTICARE_API_TOKEN>'
 
 def init_logging():
 
