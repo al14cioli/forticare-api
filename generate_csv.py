@@ -4,7 +4,9 @@ import zipfile
 import PyPDF2
 import re
 import argparse
-import os 
+import os
+from pathlib import Path
+
 
 # Global
 license_types = {
@@ -64,6 +66,7 @@ def parse_command_line_arguments():
             licenses)
 
 def get_license_type(zip_file):
+
     result = re.search('([A-Z]{2,3})-', zip_file)
     return result.group(1) if result else None
 
@@ -98,12 +101,15 @@ def write_csv_output_fc(zip_file, ip, desc, licenses):
     fgt_sns = get_fgt_sn_from_licenses_folder(licenses)
     index_sn = 0
     with zipfile.ZipFile(zip_file) as myzip:
+        myzip.extractall()
         for pdf_file_name in myzip.namelist():
-            pdf_file_handler = myzip.open(pdf_file_name)
-            pdf_reader = PyPDF2.PdfFileReader(pdf_file_handler)
-            # Contract Registration Code is on page 2 (ie. index 1)
-            page_text = pdf_reader.getPage(1).extractText()
-            #print(page_text)
+            file = Path(pdf_file_name)
+            with open(pdf_file_name, 'rb') as f:
+                pdf_reader = PyPDF2.PdfFileReader(f)
+                # Contract Registration Code is on page 2 (ie. index 1)
+                page_text = pdf_reader.getPage(1).extractText()
+            f.close()
+            file.unlink()
             registration_code = get_contract_registration_code(page_text)
             sn = fgt_sns[index_sn]
             index_sn += 1
@@ -114,11 +120,15 @@ def write_csv_output_fc(zip_file, ip, desc, licenses):
 
 def write_csv_output_fgt_fmg_faz(zip_file, ip, desc):
     with zipfile.ZipFile(zip_file) as myzip:
+        myzip.extractall()
         for pdf_file_name in myzip.namelist():
-            pdf_file_handler = myzip.open(pdf_file_name)
-            pdf_reader = PyPDF2.PdfFileReader(pdf_file_handler)
-            page_text = pdf_reader.getPage(0).extractText()
-            #print(page_text)            
+            file = Path(pdf_file_name)
+            with open(pdf_file_name, 'rb') as f:
+                pdf_reader = PyPDF2.PdfFileReader(f)
+                # Registration Code is on page 1 (ie. index 0)
+                page_text = pdf_reader.getPage(0).extractText()
+            f.close()
+            file.unlink()
             registration_code = get_registration_code(page_text)
             print('{},{},{}'.format(registration_code,
                                     ip,
