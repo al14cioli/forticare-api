@@ -12,6 +12,7 @@ from pathlib import Path
 license_types = {
     'FG': 'FortiGate VM',
     'FMG': 'FortiManager VM',
+    'FAC': 'FortiAuthenticator VM',
     'FAZ': 'FortiAnalyzer VM',
     'FC': 'Service Entitlement',
 }
@@ -118,7 +119,7 @@ def write_csv_output_fc(zip_file, ip, desc, licenses):
                                     desc,
                                     sn))
 
-def write_csv_output_fgt_fmg_faz(zip_file, ip, desc):
+def write_csv_output(zip_file, ip, desc):
     with zipfile.ZipFile(zip_file) as myzip:
         myzip.extractall()
         for pdf_file_name in myzip.namelist():
@@ -147,6 +148,6 @@ if __name__ == '__main__':
         if license_type == 'FC':
             write_csv_output_fc(zip_file, ip, desc, licenses)
         else:
-            write_csv_output_fgt_fmg_faz(zip_file, ip, desc)
+            write_csv_output(zip_file, ip, desc)
     else:
         print('Unknown license type: please check the given ZIP file')
