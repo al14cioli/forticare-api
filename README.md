@@ -61,7 +61,7 @@ To generate a CSV file, just redirect the output to a file:
 ./generate_csv.py -f FMG-VM-BASE_30325015.zip -d "SWST - EBC DEMO - FMG 6.4.x" -i 10.0.0.1 > fmg.csv
 ````
 
-# Register your licenses
+## Register your licenses
 
 We can just use the shell script `register.sh`:
 
