@@ -12,7 +12,10 @@ Create in your working directory a `.forticare` in INI format as shown below
 url = https://Support.Fortinet.COM/ES/FCWS_RegistrationService.svc/REST
 token = NZTB-630M-OLYE-PPKG-4WWM-TL2A-WLZ2-0DJU
 ```
-# To register FGT, FMG or FAZ VM licenses
+
+**NOTE:** Please contact your Fortinet representative to get a valid token.
+
+# To register FGT, FMG, FAZ or FAC VM licenses
 
 ## Create a CSV file
 
