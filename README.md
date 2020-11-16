@@ -46,23 +46,27 @@ D0UAB-FWEX6-MQ6A5-EVX8H-GHB1W,192.168.244.200,FMG: SD-WAN orchestrator demo
 Notes:
 
   [1] For the moment, the CSV generator has been tested against ZIP files for
-      FAC-VM, FAZ-VM, FGT-VM, FMG-VM and the 365 bundle entitlement products.
+      FAC-VM, FAZ-VM, FGT-VM, FMG-VM, FPC-VM and the 365 bundle
+      entitlement products.
 
 To generate a CSV file, just redirect the output to a file:
 
 ```
-# For FAC-VM:
+# For FAC-VM (all generated licenses will be tied to ip 10.0.0.1)
 ./generate_csv.py -f FAC-VM-BASE_30325014.zip  -d "SWST - EBC DEMO - FAC 6.1.x" --ip "10.0.0.1" > fac.csv
 
-# For FAZ-VM:
-./generate_csv.py -f FAZ-VM-BASE_30325016.zip -d "SWST - EBC DEMO - FAZ 6.4.x" -i 10.0.0.1 > faz.csv
+# For FAZ-VM (all generated licenses will be tied to ip 10.0.0.1)
+./generate_csv.py -f FAZ-VM-BASE_30325016.zip -d "SWST - EBC DEMO - FAZ 6.4.x" --ip "10.0.0.1" > faz.csv
 
-# For FGT-VM:
+# For FGT-VM (the generated licenses won't be tied to any IP addresses)
 ./generate_csv.py -f FG-VMUL_30325017.zip -d "SWST - EBC DEMO FGT 6.4.x" --ip "" > fgt.csv
 
-# For FMG-VM:
-./generate_csv.py -f FMG-VM-BASE_30325015.zip -d "SWST - EBC DEMO - FMG 6.4.x" -i 10.0.0.1 > fmg.csv
-````
+# For FMG-VM (all generated licenses will be tied to ip 10.0.0.1)
+./generate_csv.py -f FMG-VM-BASE_30325015.zip -d "SWST - EBC DEMO - FMG 6.4.x" --ip "10.0.0.1" > fmg.csv
+
+# For FPC-VM (all generated licenses will be tied to ip 10.0.0.1)
+./generate_csv.py -f FPC-VM-BASE_32252314.zip -d "SWST - EBC DEMO - FMG 6.4.x" -ip "10.0.0.1" > fmg.csv
+```
 
 ## Register your licenses
 

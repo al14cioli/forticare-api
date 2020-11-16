@@ -14,6 +14,7 @@ license_types = {
     'FMG': 'FortiManager VM',
     'FAC': 'FortiAuthenticator VM',
     'FAZ': 'FortiAnalyzer VM',
+    'FPC': 'FortiPortal VM',
     'FC': 'Service Entitlement',
 }
 
