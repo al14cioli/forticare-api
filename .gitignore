@@ -23,3 +23,9 @@ Pipfile*
 
 \#*\#
 *.*˜
+
+# Licenses folder
+licenses
+
+# Python Virtual Environement
+.venv

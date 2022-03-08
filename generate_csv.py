@@ -18,10 +18,11 @@ license_types = {
     "FAZ": "FortiAnalyzer VM",
     "FPC": "FortiPortal VM",
     "FC": "Service Entitlement",
+    "FC7": "FortiGate-VM (unlimited CPU) Subscription License with 360 Protection Bundle", 
 }
 
 
-def get_registration_code(string):
+def get_registration_code(string, license_type):
     """
     Extract the registration code.
 
@@ -30,6 +31,9 @@ def get_registration_code(string):
         string: str
             the string pattern from which is extracted the registration code.
 
+        license_type: str
+            one of the key from the dict global variable "license_types"
+
     Returns
     -------
         result:
@@ -37,7 +41,10 @@ def get_registration_code(string):
         None:
             None if no code is found in string.
     """
-    result = re.search(r"Registration Code\s+:\s+(.{30})", string)
+    if license_type == "FC7":
+        result = re.search(r"ContractRegistrationCode:(.{12})", string)
+    else:
+        result = re.search(r"Registration Code\s+:\s+(.{30})", string)        
 
     return result.group(1) if result else None
 
@@ -155,7 +162,7 @@ def get_license_type(zip_file):
         result.group(1): str
             the first 2 or 3 letters extracted from the ZIP file name.
     """
-    result = re.search(r"([A-Z]{2,3})-", zip_file)
+    result = re.search(r"([A-Z0-9]{2,3})-", zip_file)
     return result.group(1) if result else None
 
 
@@ -225,7 +232,7 @@ def write_csv_output_fc(zip_file, ip, desc, licenses):
             print("{},{},{},{}".format(registration_code, ip, desc, sn))
 
 
-def write_csv_output(zip_file, ip, desc):
+def write_csv_output(zip_file, ip, desc, license_type):
     """
     Write a CSV file for licenses.
 
@@ -239,6 +246,9 @@ def write_csv_output(zip_file, ip, desc):
 
         desc: str
             the description to associate to the licenses.
+
+        license_type: str
+            one of the key from the dict global variable "license_types"
     """
     with zipfile.ZipFile(zip_file) as myzip:
         myzip.extractall()
@@ -246,11 +256,15 @@ def write_csv_output(zip_file, ip, desc):
             file = Path(pdf_file_name)
             with open(pdf_file_name, "rb") as f:
                 pdf_reader = PyPDF2.PdfFileReader(f)
-                # Registration Code is on page 1 (ie. index 0)
-                page_text = pdf_reader.getPage(0).extractText()
+                if license_type == "FC7":
+                    # Registration Code is on page 2 (ie. index 1)
+                    page_text = pdf_reader.getPage(1).extractText()
+                else:
+                    # Registration Code is on page 1 (ie. index 0)
+                    page_text = pdf_reader.getPage(0).extractText()                    
             f.close()
             file.unlink()
-            registration_code = get_registration_code(page_text)
+            registration_code = get_registration_code(page_text, license_type)
             print("{},{},{}".format(registration_code, ip, desc))
 
 
@@ -267,6 +281,6 @@ if __name__ == "__main__":
         if license_type == "FC":
             write_csv_output_fc(zip_file, ip, desc, licenses)
         else:
-            write_csv_output(zip_file, ip, desc)
+            write_csv_output(zip_file, ip, desc, license_type)
     else:
         print("Unknown license type: please check the given ZIP file")
