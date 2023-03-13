@@ -7,7 +7,10 @@ registration codes and to retrieve license files.
 
 ## Before starting
 
-Create in your working directory a `.forticare` in INI format as shown below
+### Set your FortiCare API Token (API < 3.0 only)
+
+Create in your working directory a `.forticare` file in INI format as shown
+below:
 
 ```config
 [forticare]
@@ -15,7 +18,21 @@ url = https://Support.Fortinet.COM/ES/FCWS_RegistrationService.svc/REST
 token = NZTB-630M-OLYE-PPKG-4WWM-TL2A-WLZ2-0DJU
 ```
 
-**NOTE:** Please contact your Fortinet representative to get a valid token.
+---
+**NOTE:**
+
+- Please contact your Fortinet representative to get a valid token.
+
+---
+
+### Create your python virtual environment
+
+```shell
+python3 -m venv .venv
+source .venv/bin/activate
+python3 -m pip install pip --upgrade
+python3 -m pip install 'PyPDF2<3.0'
+```
 
 ## To register FGT, FMG, FAZ or FAC VM licenses
 
